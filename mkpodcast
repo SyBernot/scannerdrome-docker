@@ -14,22 +14,20 @@ my $file =$1;
 chomp $file;
 
 print "FILE: $file\n";
-
+#set the genre 
 $cmd="/usr/bin/eyeD3 -G 186 $file";
 ($status, $output) = executeCommand($cmd);
 print $output;
+#fixup date
 #eyed3.core:WARNING: Invalid date: 20191222
 $output =~/.*Invalid date:\s+(\d\d\d\d)(\d\d)(\d\d)/;
 my $year  = $1;
 my $month = $2;
 my $day   = $3;
-$cmd="/usr/bin/eyeD3  --text-frame TYER:${year} --text-frame TDAT:${day}${month} $file";
+$cmd="/usr/bin/eyeD3   --release-date ${year}-${month}-${day} $file";
 ($status, $output) = executeCommand($cmd);
 print $output;
-
 exit 0;
-
-
 
 sub executeCommand {
 ###############################################################################
@@ -43,4 +41,3 @@ sub executeCommand {
     my $command = join ' ', @_;
     reverse ($_ = qx{$command 2>&1}, $? >> 8);
 }
-
